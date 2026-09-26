@@ -49,11 +49,22 @@ export const createApp = (): Express => {
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-  // Health check endpoint
-  app.get('/health', (_req, res) => {
+  // Root health endpoint
+  app.get('/', (_req, res) => {
     res.json({
+      success: true,
+      message: 'ARES API is running',
+      version: '1.0.0',
+    });
+  });
+
+  // Health check endpoints
+  app.get(['/health', '/api/health'], (_req, res) => {
+    res.json({
+      success: true,
       status: 'healthy',
       system: 'ARES — Automated Robustness Evaluation System',
+      version: '1.0.0',
       timestamp: new Date().toISOString(),
     });
   });

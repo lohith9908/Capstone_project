@@ -9,7 +9,7 @@ import {
   IFeatureVector,
   AttackType,
   IReport,
-} from '../types/index.js';
+} from '../types';
 
 const api = axios.create({
   baseURL: '/api',
