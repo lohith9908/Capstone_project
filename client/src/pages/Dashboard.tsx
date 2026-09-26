@@ -34,6 +34,12 @@ export const Dashboard: React.FC = () => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  // Complete Demo Modal state
+  const [demoRunning, setDemoRunning] = useState(false);
+  const [demoModalOpen, setDemoModalOpen] = useState(false);
+  const [demoStage, setDemoStage] = useState(0);
+  const [demoResult, setDemoResult] = useState<any>(null);
+
   const fetchMetrics = async () => {
     setLoading(true);
     try {
@@ -43,6 +49,23 @@ export const Dashboard: React.FC = () => {
       console.error('Failed to load dashboard metrics', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const runCompleteDemo = async () => {
+    setDemoModalOpen(true);
+    setDemoRunning(true);
+    setDemoStage(1);
+    try {
+      const res = await interactiveApi.runDemo();
+      setDemoResult(res);
+      setDemoStage(9);
+      await fetchMetrics();
+    } catch (err) {
+      console.error('Demo execution failed', err);
+      setDemoStage(-1);
+    } finally {
+      setDemoRunning(false);
     }
   };
 
@@ -73,29 +96,6 @@ export const Dashboard: React.FC = () => {
     { name: 'Padding Attacks', successful: data?.attackStats?.successfulPaddingAttacks || 0 },
     { name: 'GAMMA Attacks', successful: data?.attackStats?.successfulGammaAttacks || 0 },
   ];
-
-  // Complete Demo Modal state
-  const [demoRunning, setDemoRunning] = useState(false);
-  const [demoModalOpen, setDemoModalOpen] = useState(false);
-  const [demoStage, setDemoStage] = useState(0);
-  const [demoResult, setDemoResult] = useState<any>(null);
-
-  const runCompleteDemo = async () => {
-    setDemoModalOpen(true);
-    setDemoRunning(true);
-    setDemoStage(1);
-    try {
-      const res = await interactiveApi.runDemo();
-      setDemoResult(res);
-      setDemoStage(9);
-      await fetchMetrics();
-    } catch (err) {
-      console.error('Demo execution failed', err);
-      setDemoStage(-1);
-    } finally {
-      setDemoRunning(false);
-    }
-  };
 
   return (
     <div className="space-y-8">
