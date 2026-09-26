@@ -80,7 +80,9 @@ export const Sidebar: React.FC = () => {
                     }`
                   }
                 >
-                  <Icon className="w-4 h-4 shrink-0" />
+                  <span aria-hidden="true" className="inline-flex shrink-0">
+                    <Icon className="w-4 h-4 shrink-0" aria-hidden="true" focusable="false" />
+                  </span>
                   <span>{item.name}</span>
                 </NavLink>
               );

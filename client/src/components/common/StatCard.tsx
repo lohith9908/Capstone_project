@@ -29,8 +29,10 @@ export const StatCard: React.FC<StatCardProps> = ({
     <div className={`p-5 rounded-xl border bg-slate-900/60 backdrop-blur-md transition-all duration-200 ${variantStyles[variant]}`}>
       <div className="flex items-center justify-between">
         <span className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">{title}</span>
-        <div className="p-2 rounded-lg bg-slate-800/80 border border-slate-700/60">
-          <Icon className="w-4 h-4" />
+        <div className="p-2 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center">
+          <span aria-hidden="true" className="inline-flex shrink-0">
+            <Icon className="w-4 h-4" aria-hidden="true" focusable="false" />
+          </span>
         </div>
       </div>
       <div className="mt-4 flex items-baseline justify-between">

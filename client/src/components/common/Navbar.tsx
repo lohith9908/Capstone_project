@@ -12,7 +12,9 @@ export const Navbar: React.FC = () => {
       <div className="flex items-center space-x-3">
         <Link to="/" className="flex items-center space-x-2.5 group">
           <div className="p-2 bg-cyan-500/10 border border-cyan-500/30 rounded-lg group-hover:border-cyan-400/60 transition-colors">
-            <Shield className="w-5 h-5 text-cyan-400" />
+            <span aria-hidden="true" className="inline-flex shrink-0">
+              <Shield className="w-5 h-5 text-cyan-400" aria-hidden="true" focusable="false" />
+            </span>
           </div>
           <div>
             <div className="flex items-center space-x-2">
@@ -37,7 +39,9 @@ export const Navbar: React.FC = () => {
         </div>
 
         <div className="flex items-center space-x-2 bg-slate-900/60 border border-slate-800 px-3 py-1.5 rounded-full">
-          <Activity className="w-3.5 h-3.5 text-cyan-400" />
+          <span aria-hidden="true" className="inline-flex shrink-0">
+            <Activity className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" focusable="false" />
+          </span>
           <span className="text-slate-300 font-mono">Simulations: Deterministic</span>
         </div>
       </div>
@@ -55,7 +59,9 @@ export const Navbar: React.FC = () => {
               title="Sign Out"
               className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 border border-transparent hover:border-red-500/20 rounded-lg transition-colors"
             >
-              <LogOut className="w-4 h-4" />
+              <span aria-hidden="true" className="inline-flex shrink-0">
+                <LogOut className="w-4 h-4" aria-hidden="true" focusable="false" />
+              </span>
             </button>
           </div>
         ) : (
@@ -63,7 +69,9 @@ export const Navbar: React.FC = () => {
             to="/login"
             className="flex items-center space-x-2 text-xs font-semibold px-4 py-2 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 rounded-lg transition-colors"
           >
-            <User className="w-3.5 h-3.5" />
+            <span aria-hidden="true" className="inline-flex shrink-0">
+              <User className="w-3.5 h-3.5" aria-hidden="true" focusable="false" />
+            </span>
             <span>Sign In</span>
           </Link>
         )}

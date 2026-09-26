@@ -33,6 +33,7 @@ import {
 export const Dashboard: React.FC = () => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Complete Demo Modal state
   const [demoRunning, setDemoRunning] = useState(false);
@@ -42,11 +43,13 @@ export const Dashboard: React.FC = () => {
 
   const fetchMetrics = async () => {
     setLoading(true);
+    setError(null);
     try {
       const res = await dashboardApi.getMetrics();
       setData(res);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to load dashboard metrics', err);
+      setError(err?.response?.data?.error?.message || err?.message || 'Failed to connect to backend telemetry service.');
     } finally {
       setLoading(false);
     }
@@ -77,8 +80,30 @@ export const Dashboard: React.FC = () => {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="flex flex-col items-center space-y-3">
-          <RefreshCw className="w-8 h-8 text-cyan-400 animate-spin" />
+          <span aria-hidden="true" className="inline-flex shrink-0">
+            <RefreshCw className="w-8 h-8 text-cyan-400 animate-spin" aria-hidden="true" focusable="false" />
+          </span>
           <span className="text-sm font-mono text-slate-400">Loading Database-Backed Security Metrics...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && !data) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="p-8 rounded-2xl border border-red-500/30 bg-red-500/10 text-center space-y-4 max-w-md">
+          <span aria-hidden="true" className="inline-flex p-3 rounded-xl bg-red-500/20 text-red-400">
+            <ShieldAlert className="w-8 h-8" aria-hidden="true" focusable="false" />
+          </span>
+          <h2 className="text-base font-bold text-white font-mono">Telemetry Service Unavailable</h2>
+          <p className="text-xs text-red-300 font-mono">{error}</p>
+          <button
+            onClick={fetchMetrics}
+            className="px-4 py-2 bg-red-500 hover:bg-red-400 text-white rounded-lg text-xs font-mono font-bold transition-colors"
+          >
+            Retry Connection
+          </button>
         </div>
       </div>
     );
@@ -112,23 +137,29 @@ export const Dashboard: React.FC = () => {
         <div className="flex items-center gap-3">
           <button
             onClick={fetchMetrics}
-            className="p-2.5 text-slate-400 hover:text-slate-200 bg-slate-900 border border-slate-800 rounded-lg transition-colors"
+            className="p-2.5 text-slate-400 hover:text-slate-200 bg-slate-900 border border-slate-800 rounded-lg transition-colors flex items-center justify-center"
             title="Refresh Metrics"
           >
-            <RefreshCw className="w-4 h-4" />
+            <span aria-hidden="true" className="inline-flex shrink-0">
+              <RefreshCw className="w-4 h-4" aria-hidden="true" focusable="false" />
+            </span>
           </button>
           <button
             onClick={runCompleteDemo}
             className="flex items-center gap-2 text-xs font-bold px-4 py-2.5 bg-gradient-to-r from-emerald-400 to-cyan-500 hover:from-emerald-300 hover:to-cyan-400 text-slate-950 rounded-lg shadow-lg shadow-emerald-500/20 transition-all font-mono"
           >
-            <Sparkles className="w-4 h-4 fill-current" />
+            <span aria-hidden="true" className="inline-flex shrink-0">
+              <Sparkles className="w-4 h-4 fill-current" aria-hidden="true" focusable="false" />
+            </span>
             <span>Run Complete ARES Demo</span>
           </button>
           <Link
             to="/attacks"
             className="flex items-center gap-2 text-xs font-semibold px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 rounded-lg transition-all"
           >
-            <Play className="w-3.5 h-3.5 fill-current text-cyan-400" />
+            <span aria-hidden="true" className="inline-flex shrink-0">
+              <Play className="w-3.5 h-3.5 fill-current text-cyan-400" aria-hidden="true" focusable="false" />
+            </span>
             <span>Attack Studio</span>
           </Link>
         </div>
@@ -177,7 +208,9 @@ export const Dashboard: React.FC = () => {
             </div>
             <Link to="/robustness" className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1 font-mono">
               <span>View Curves</span>
-              <ArrowUpRight className="w-3 h-3" />
+              <span aria-hidden="true" className="inline-flex shrink-0">
+                <ArrowUpRight className="w-3 h-3" aria-hidden="true" focusable="false" />
+              </span>
             </Link>
           </div>
 
@@ -189,23 +222,27 @@ export const Dashboard: React.FC = () => {
                 <YAxis stroke="#64748b" fontSize={12} tickLine={false} />
                 <Tooltip
                   contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', fontSize: '12px' }}
+                  cursor={{ fill: '#1e293b', opacity: 0.4 }}
                 />
-                <Bar dataKey="successful" fill="#ef4444" radius={[4, 4, 0, 0]} name="Successful Evasions" />
+                <Bar dataKey="successful" fill="#ef4444" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Defense Recommendations Donut */}
-        <div className="p-6 rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-md">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-base font-semibold text-white">Defense Allocations</h2>
-              <p className="text-xs text-slate-400 mt-0.5">Optimal hardening strategies chosen</p>
+        {/* Defense Allocation Distribution */}
+        <div className="p-6 rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-md flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <h2 className="text-base font-semibold text-white">Defense Allocation</h2>
+              <Link to="/defenses" className="text-xs text-cyan-400 hover:text-cyan-300 font-mono">
+                Explore
+              </Link>
             </div>
+            <p className="text-xs text-slate-400 mb-6">Optimal defense recommendations dynamically generated</p>
           </div>
 
-          <div className="h-52 flex items-center justify-center">
+          <div className="h-48 relative flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -214,7 +251,7 @@ export const Dashboard: React.FC = () => {
                   cy="50%"
                   innerRadius={50}
                   outerRadius={75}
-                  paddingAngle={6}
+                  paddingAngle={5}
                   dataKey="count"
                 >
                   {defenseChartData.map((entry, index) => (
@@ -251,7 +288,9 @@ export const Dashboard: React.FC = () => {
           </div>
           <Link to="/reports" className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1 font-mono">
             <span>View All Reports</span>
-            <ArrowUpRight className="w-3 h-3" />
+            <span aria-hidden="true" className="inline-flex shrink-0">
+              <ArrowUpRight className="w-3 h-3" aria-hidden="true" focusable="false" />
+            </span>
           </Link>
         </div>
 
@@ -286,10 +325,13 @@ export const Dashboard: React.FC = () => {
                     </td>
                     <td className="py-3 px-4 text-right">
                       <Link
-                        to={`/reports`}
-                        className="text-cyan-400 hover:text-cyan-300 hover:underline"
+                        to="/reports"
+                        className="inline-flex items-center gap-1 text-cyan-400 hover:text-cyan-300 hover:underline font-mono text-xs"
                       >
-                        Inspect
+                        <span>Inspect</span>
+                        <span aria-hidden="true" className="inline-flex shrink-0">
+                          <ArrowUpRight className="w-3 h-3" aria-hidden="true" focusable="false" />
+                        </span>
                       </Link>
                     </td>
                   </tr>
@@ -313,7 +355,9 @@ export const Dashboard: React.FC = () => {
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-400">
-                  <Sparkles className="w-5 h-5" />
+                  <span aria-hidden="true" className="inline-flex shrink-0">
+                    <Sparkles className="w-5 h-5" aria-hidden="true" focusable="false" />
+                  </span>
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-white">Full ARES Demonstration Pipeline</h3>
@@ -325,7 +369,9 @@ export const Dashboard: React.FC = () => {
                   onClick={() => setDemoModalOpen(false)}
                   className="p-1.5 text-slate-400 hover:text-slate-200 rounded-lg hover:bg-slate-800"
                 >
-                  <X className="w-4 h-4" />
+                  <span aria-hidden="true" className="inline-flex shrink-0">
+                    <X className="w-4 h-4" aria-hidden="true" focusable="false" />
+                  </span>
                 </button>
               )}
             </div>
@@ -360,9 +406,13 @@ export const Dashboard: React.FC = () => {
                   >
                     <span className="flex items-center gap-2">
                       {isDone ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span aria-hidden="true" className="inline-flex shrink-0">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" aria-hidden="true" focusable="false" />
+                        </span>
                       ) : isCurrent ? (
-                        <RefreshCw className="w-4 h-4 text-cyan-400 animate-spin shrink-0" />
+                        <span aria-hidden="true" className="inline-flex shrink-0">
+                          <RefreshCw className="w-4 h-4 text-cyan-400 animate-spin shrink-0" aria-hidden="true" focusable="false" />
+                        </span>
                       ) : (
                         <span className="w-4 h-4 rounded-full border border-slate-700 inline-block shrink-0" />
                       )}
@@ -380,7 +430,9 @@ export const Dashboard: React.FC = () => {
             {!demoRunning && demoStage === 9 && (
               <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
                 <span className="text-xs text-emerald-400 font-mono flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4" />
+                  <span aria-hidden="true" className="inline-flex shrink-0">
+                    <ShieldCheck className="w-4 h-4" aria-hidden="true" focusable="false" />
+                  </span>
                   <span>Pipeline successfully executed! {demoResult?.reportId ? `(Report: ${demoResult.reportId.slice(-6)})` : ''}</span>
                 </span>
                 <div className="flex items-center gap-2">
@@ -390,7 +442,9 @@ export const Dashboard: React.FC = () => {
                     className="flex items-center gap-1.5 px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs rounded-lg transition-colors font-mono"
                   >
                     <span>View Audit Dossier</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span aria-hidden="true" className="inline-flex shrink-0">
+                      <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" focusable="false" />
+                    </span>
                   </Link>
                 </div>
               </div>
