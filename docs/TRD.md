@@ -12,16 +12,16 @@ Services
     ↓
 Analysis Engines
     ↓
-Prisma
+Mongoose
     ↓
-PostgreSQL
+MongoDB
 ```
 
 ## Frontend
 React, Vite, TypeScript, Tailwind CSS, React Router, Axios, Recharts, Lucide React.
 
 ## Backend
-Node.js, Express, TypeScript, Prisma, PostgreSQL, JWT, bcrypt, Zod, Helmet, express-rate-limit.
+Node.js, Express, TypeScript, Mongoose, MongoDB, JWT, bcrypt, Zod, Helmet, express-rate-limit.
 
 ## Backend Layers
 Routes define endpoints.
@@ -37,6 +37,7 @@ server/src/
 ├── routes/
 ├── services/
 ├── engines/
+├── models/
 ├── middleware/
 ├── validators/
 ├── utils/
@@ -119,7 +120,7 @@ Use Zod for all external input.
 Only data formats such as CSV/JSON are allowed. Reject executable formats. Limit size. Never execute content.
 
 ## Security
-Helmet, CORS, rate limiting, bcrypt, JWT, secure environment variables, Prisma, centralized errors.
+Helmet, CORS, rate limiting, bcrypt, JWT, secure environment variables, Mongoose, centralized errors.
 
 ## Performance
 Use pagination, indexes, efficient queries, batch operations, transactions, and bounded dataset sizes.
@@ -129,7 +130,7 @@ Include unit, integration, API, frontend, end-to-end, security, and build tests.
 
 ## Environment
 ```text
-DATABASE_URL=
+MONGODB_URI=
 JWT_SECRET=
 PORT=
 CLIENT_URL=

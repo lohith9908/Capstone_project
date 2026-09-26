@@ -20,7 +20,7 @@ Static malware detectors can degrade under adversarial feature transformations. 
 ## Goals
 - End-to-end robustness workflow
 - Reproducible experiments
-- Persistent PostgreSQL results
+- Persistent MongoDB results
 - Transparent deterministic calculations
 - Visual analytics
 - Automated reports
@@ -82,4 +82,4 @@ Use loading states, error states, empty states, disabled duplicate actions, clea
 State clearly that the project uses deterministic TypeScript simulations rather than actual LightGBM, SHAP, executable malware transformation, or real model training.
 
 ## Success Criteria
-A new user can complete the entire workflow without manually changing the database. All important UI actions perform real backend operations and results persist in PostgreSQL.
+A new user can complete the entire workflow without manually changing the database. All important UI actions perform real backend operations and results persist in MongoDB.

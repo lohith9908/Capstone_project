@@ -50,7 +50,7 @@ After each major phase:
 ## Critical Technology Rule
 No Python, Flask, Django, FastAPI, TensorFlow, PyTorch, scikit-learn, LightGBM, SHAP, external ML models, or cloud AI APIs.
 
-Use Node.js, TypeScript/JavaScript, React, Express, Prisma, PostgreSQL, and deterministic algorithms.
+Use Node.js, TypeScript/JavaScript, React, Express, Mongoose, MongoDB, and deterministic algorithms.
 
 ## Safety
 Only feature vectors and dataset records may be analyzed.
@@ -66,14 +66,13 @@ Never call the attack simulation executable malware modification.
 Never call the defenses real model training or actual LightGBM constraints.
 
 ## Data
-PostgreSQL is the source of truth for persistent state. Demo data must be seeded through the backend/database and dashboard metrics derived from database records.
+MongoDB is the source of truth for persistent state. Demo data must be seeded through the backend/database and dashboard metrics derived from database records.
 
 ## Final Verification
 Before completion verify:
 - npm install
-- PostgreSQL
-- Prisma generate
-- migration
+- MongoDB
+- Mongoose models
 - seed
 - backend build
 - frontend build

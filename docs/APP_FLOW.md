@@ -33,6 +33,11 @@ Recommendation
 Report
 ```
 
+## Architecture Flow
+```text
+React → Express → Services → Engines → Mongoose → MongoDB
+```
+
 ## Registration
 ```text
 Register → validate → POST API → bcrypt → create user → JWT → Dashboard

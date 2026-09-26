@@ -59,7 +59,7 @@ Verify:
 - rate limiting
 - bcrypt
 - environment secrets
-- Prisma queries
+- Mongoose queries and schema validations
 - executable rejection
 - no file execution
 - no shell execution
@@ -88,9 +88,9 @@ Keyboard navigation, visible focus, semantic labels, contrast, accessible errors
 ## Regression Checklist
 ```text
 [ ] npm install
-[ ] PostgreSQL
-[ ] Prisma generate
-[ ] migration
+[ ] MongoDB
+[ ] Mongoose models
+[ ] database indexes
 [ ] seed
 [ ] backend build
 [ ] frontend build

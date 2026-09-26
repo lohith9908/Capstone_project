@@ -1,0 +1,26 @@
+{
+  "name": "ares-platform",
+  "version": "1.0.0",
+  "description": "ARES — Automated Robustness Evaluation System for Static Malware Detection",
+  "type": "module",
+  "scripts": {
+    "dev": "node dev.js",
+    "dev:server": "npm run dev --workspace=server",
+    "dev:client": "npm run dev --workspace=client",
+    "build": "npm run build --workspace=server && npm run build --workspace=client",
+    "seed": "npm run seed --workspace=server",
+    "test": "npm run test --workspace=server"
+  },
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "keywords": [
+    "cybersecurity",
+    "adversarial-ml",
+    "malware-detection",
+    "robustness-evaluation"
+  ],
+  "author": "ARES Research Team",
+  "license": "MIT"
+}
