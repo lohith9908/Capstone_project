@@ -131,7 +131,7 @@ export const Dashboard: React.FC = () => {
             Security Posture & Robustness Overview
           </h1>
           <p className="text-sm text-slate-400 mt-1">
-            Real-time telemetry and adversarial resilience benchmarks across static malware classifiers.
+            Deterministic robustness benchmarks across static malware-detection feature vectors.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -325,7 +325,7 @@ export const Dashboard: React.FC = () => {
                     </td>
                     <td className="py-3 px-4 text-right">
                       <Link
-                        to="/reports"
+                        to={`/reports?experimentId=${exp._id}`}
                         className="inline-flex items-center gap-1 text-cyan-400 hover:text-cyan-300 hover:underline font-mono text-xs"
                       >
                         <span>Inspect</span>

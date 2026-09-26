@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { reportApi, experimentApi } from '../services/api';
+import { useSearchParams } from 'react-router-dom';
 import { IReport, IExperiment } from '../types';
 import { StatCard } from '../components/common/StatCard';
 import { Badge } from '../components/common/Badge';
@@ -20,6 +21,7 @@ import {
 } from 'lucide-react';
 
 export const ReportsStudio: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const [reports, setReports] = useState<IReport[]>([]);
   const [selectedReportId, setSelectedReportId] = useState<string>('');
   const [selectedReport, setSelectedReport] = useState<IReport | null>(null);
@@ -39,7 +41,28 @@ export const ReportsStudio: React.FC = () => {
       setReports(reportList);
       setExperiments(expList);
 
-      if (reportList.length > 0 && !selectedReportId) {
+      const expParam = searchParams.get('experimentId');
+      const reportParam = searchParams.get('reportId');
+
+      if (reportParam) {
+        const found = reportList.find((r) => r._id === reportParam);
+        if (found) {
+          setSelectedReportId(found._id);
+          setSelectedReport(found);
+        }
+      } else if (expParam) {
+        setSelectedExpId(expParam);
+        const matchingReport = reportList.find(
+          (r) => String(r.experimentId) === expParam || (r.experimentId as any)?._id === expParam
+        );
+        if (matchingReport) {
+          setSelectedReportId(matchingReport._id);
+          setSelectedReport(matchingReport);
+        } else if (reportList.length > 0) {
+          setSelectedReportId(reportList[0]._id);
+          setSelectedReport(reportList[0]);
+        }
+      } else if (reportList.length > 0 && !selectedReportId) {
         setSelectedReportId(reportList[0]._id);
         setSelectedReport(reportList[0]);
       } else if (selectedReportId) {
@@ -48,7 +71,7 @@ export const ReportsStudio: React.FC = () => {
       }
 
       if (expList.length > 0 && !selectedExpId) {
-        setSelectedExpId(expList[0]._id);
+        setSelectedExpId(expParam || expList[0]._id);
       }
     } catch (err) {
       console.error('Failed to load reports', err);
