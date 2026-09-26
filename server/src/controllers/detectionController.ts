@@ -340,7 +340,13 @@ export class DetectionController {
 
       // 4. Retrieve full results
       const results = await experimentService.getExperimentFullResults(experiment._id.toString());
-      res.json({ success: true, data: results });
+      res.json({
+        success: true,
+        data: {
+          ...results,
+          reportId: results.report?._id?.toString() || results.experiment?._id?.toString(),
+        },
+      });
     } catch (err) {
       next(err);
     }
